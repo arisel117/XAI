@@ -39,3 +39,28 @@
   - [SHAP](https://shap.readthedocs.io/en/latest/index.html#)
 
 
+## Tensorflow Integrated Gradients
+```python
+import numpy as np
+import tensorflow as tf
+
+# Load trained model
+model_path = "./model.hdf5"
+model = tf.keras.models.load_model(model_path, compile=False)
+
+# Load infer of test data
+test_x = np.random.random((1, 100, 100))    # batch, features, features
+test_y = np.random.random((1, 10))          # batch, categories
+
+# Predict data
+pred_score = model.predict(test_x, verbose=0)
+pred_y = tf.math.argmax(pred_score, axis=-1)
+real_y = np.argmax(test_y, axis=-1)
+
+# Get gradients
+with tf.GradientTape() as tape:
+    tape.watch(test_x)
+    predictions = model(test_x)    # if model have embedding layer, need split model
+    loss = tf.gather(predictions, pred_y, axis=1, batch_dims=1)
+gradients = tape.gradient(loss, predictions)
+```
