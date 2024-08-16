@@ -40,6 +40,8 @@
 
 
 - Tensorflow Integrated Gradients
+  - [TF 공식 Doc](https://www.tensorflow.org/tutorials/interpretability/integrated_gradients)
+  - [Keras 공식 Doc](https://keras.io/examples/vision/integrated_gradients/)
   ```python
   import numpy as np
   import tensorflow as tf
