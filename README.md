@@ -24,7 +24,7 @@
 
 
 ## XAI with Code
-- PyTorch에서는 Captum을 이용해 쉽게 XAI를 적용 할 수 있음
+- PyTorch Captum XAI
   - [PyTorch Doc](https://tutorials.pytorch.kr/recipes/recipes/Captum_Recipe.html)
   - [Captum Doc](https://captum.ai/docs/introduction)
   - [주요 사용 가능한 알고리즘](https://captum.ai/docs/algorithms_comparison_matrix#attribution-algorithm-comparison-matrix)은 링크게 자세하게 설명되어 있으며, 그 중에서도 주로 사용하는 알고리즘은 다음과 같음
@@ -39,28 +39,28 @@
   - [SHAP](https://shap.readthedocs.io/en/latest/index.html#)
 
 
-## Tensorflow Integrated Gradients
-```python
-import numpy as np
-import tensorflow as tf
-
-# Load trained model
-model_path = "./model.hdf5"
-model = tf.keras.models.load_model(model_path, compile=False)
-
-# Load infer of test data
-test_x = np.random.random((1, 100, 100))    # batch, features, features
-test_y = np.random.random((1, 10))          # batch, categories
-
-# Predict data
-pred_score = model.predict(test_x, verbose=0)
-pred_y = tf.math.argmax(pred_score, axis=-1)
-real_y = np.argmax(test_y, axis=-1)
-
-# Get gradients
-with tf.GradientTape() as tape:
-    tape.watch(test_x)
-    predictions = model(test_x)    # if model have embedding layer, need split model
-    loss = tf.gather(predictions, pred_y, axis=1, batch_dims=1)
-gradients = tape.gradient(loss, predictions)
-```
+- Tensorflow Integrated Gradients
+  ```python
+  import numpy as np
+  import tensorflow as tf
+  
+  # Load trained model
+  model_path = "./model.hdf5"
+  model = tf.keras.models.load_model(model_path, compile=False)
+  
+  # Load infer of test data
+  test_x = np.random.random((1, 100, 100))    # batch, features, features
+  test_y = np.random.random((1, 10))          # batch, categories
+  
+  # Predict data
+  pred_score = model.predict(test_x, verbose=0)
+  pred_y = tf.math.argmax(pred_score, axis=-1)
+  real_y = np.argmax(test_y, axis=-1)
+  
+  # Get gradients
+  with tf.GradientTape() as tape:
+      tape.watch(test_x)
+      predictions = model(test_x)    # if model have embedding layer, need split model
+      loss = tf.gather(predictions, pred_y, axis=1, batch_dims=1)
+  gradients = tape.gradient(loss, predictions)
+  ```
